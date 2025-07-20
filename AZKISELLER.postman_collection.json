@@ -1,0 +1,2616 @@
+{
+	"info": {
+		"_postman_id": "b2393469-4eb8-4836-8b57-acd5b96d5e2c",
+		"name": "AZKISELLER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36790248"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "SendPhoneNumber",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phoneNumber\": \"{{phoneNumber}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/SellerAuthenticate/check_login_method?phoneNumber={{phoneNumber}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"SellerAuthenticate",
+								"check_login_method"
+							],
+							"query": [
+								{
+									"key": "phoneNumber",
+									"value": "{{phoneNumber}}"
+								}
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Send_Otp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/SellerAuthenticate/send_OTP_code?phoneNumber={{phoneNumber}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"SellerAuthenticate",
+								"send_OTP_code"
+							],
+							"query": [
+								{
+									"key": "phoneNumber",
+									"value": "{{phoneNumber}}"
+								}
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "MOIck-otp",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let otpCode = response[0].otp;\r",
+									"// ذخیره در Environment\r",
+									"pm.environment.set(\"otpCode\",otpCode);\r",
+									"console.log(\"OTP Code saved:\", otpCode);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/api/MockLogin/send_sms_logs",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"MockLogin",
+								"send_sms_logs"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response=pm.response.json();",
+									"let token=\"Bearer \"+response.token;",
+									"pm.environment.set(\"token\",token);",
+									"console.log(\"Token saved:\", token);",
+									"",
+									"",
+									"// let jsonData = pm.response.json();",
+									"// console.log(\"Full response:\", jsonData); // بررسی همه خروجی",
+									"",
+									"// let token = jsonData.token;",
+									"",
+									"// if (token) {",
+									"//   pm.environment.set(\"token\", token);",
+									"//   console.log(\"Token saved:\", token);",
+									"// } else {",
+									"//   console.warn(\"Token not found in response!\");",
+									"// }"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\": \"string\",\n  \"phoneNumber\": \"{{phoneNumber}}\",\n  \"confirmationCode\": {{otpCode}},\n  \"twoFactorAuthenticationCode\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/SellerAuthenticate/login",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"SellerAuthenticate",
+								"login"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Add-Account",
+			"item": [
+				{
+					"name": "new-Account",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"{\r",
+									"    const Lastnames=['احمدی','کریمی','کارگر','مختار','محرم'];\r",
+									"    const FirstNames=['رویا','علی','امید','رزا','مونا','مریم']\r",
+									"    let randomLastName=Lastnames[Math.floor(Math.random()*Lastnames.length)];\r",
+									"    let randomFirstName=FirstNames[Math.floor(Math.random()*FirstNames.length)];\r",
+									"    pm.environment.set(\"lastName\",randomLastName);\r",
+									"    pm.environment.set(\"FirstName\",randomFirstName)\r",
+									"\r",
+									"    //ساخت شماره موبایل رندوم\r",
+									"    let randomphone = \"099\" + Math.floor(10000000 + Math.random() * 89999999);\r",
+									"    pm.environment.set(\"Mobile\",randomphone);\r",
+									"\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let accountId = response.customerFinanceAccount.accountId;\r",
+									"//pm.environment.set(\"accountId\",accountId);\r",
+									"\r",
+									"if (accountId) {\r",
+									"    pm.environment.set(\"accountId\", accountId); // ذخیره در environment\r",
+									"    console.log(\"✅ accountId saved:\", accountId);\r",
+									"} else {\r",
+									"    console.warn(\"⚠️ accountId not found in response\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "{{baseurl}}"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/crm/accounts?page=1"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6ImY2MGFlN2U2LWYyOGItNGMzZS1hMzRmLWNjYjFhMGQzYmU4MCIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyMzE2NzkwfQ.nARQqw64IssSEFgatl87lqXP51QFlVI0bZxIKP8VtSE"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"Natural\",\r\n    \"countryId\": \"Iran\",\r\n    \"firstName\":\"{{FirstName}}\",\r\n    \"lastName\":\"{{lastName}}\",\r\n    \"phoneNumber\":\"{{Mobile}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/Account",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"Account"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/Account' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6ImY2MGFlN2U2LWYyOGItNGMzZS1hMzRmLWNjYjFhMGQzYmU4MCIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyMzE2NzkwfQ.nARQqw64IssSEFgatl87lqXP51QFlVI0bZxIKP8VtSE' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6ImY2MGFlN2U2LWYyOGItNGMzZS1hMzRmLWNjYjFhMGQzYmU4MCIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyMzE2NzkwfQ.nARQqw64IssSEFgatl87lqXP51QFlVI0bZxIKP8VtSE' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/crm/accounts?page=1' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw '{\"type\":\"Natural\",\"countryId\":\"Iran\",\"lastName\":\"احمدی\",\"phoneNumber\":\"09935656125\"}'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New-Opporyunity",
+			"item": [
+				{
+					"name": "ADD-Opporyunity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let opportunityId = response.currentStage.opportunityId;\r",
+									"pm.environment.set(\"opportunityId\",opportunityId)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "https://stage.azki.dev"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/crm/accounts?page=1"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6ImY2MGFlN2U2LWYyOGItNGMzZS1hMzRmLWNjYjFhMGQzYmU4MCIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyMzE2NzkwfQ.nARQqw64IssSEFgatl87lqXP51QFlVI0bZxIKP8VtSE"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"opportunityStageId\": \"64e47ecbfb4d070f4440a36c\",\r\n    \"insuranceTypeId\": \"Thaleth\",\r\n    \"orderType\": \"New\",\r\n    \"expirationDate\": \"2025-07-11T12:17:19.378Z\",\r\n    \"accountId\": \"{{accountId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stage.azki.dev/api/Opportunity",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"Opportunity"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/Opportunity' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6ImY2MGFlN2U2LWYyOGItNGMzZS1hMzRmLWNjYjFhMGQzYmU4MCIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyMzE2NzkwfQ.nARQqw64IssSEFgatl87lqXP51QFlVI0bZxIKP8VtSE' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6ImY2MGFlN2U2LWYyOGItNGMzZS1hMzRmLWNjYjFhMGQzYmU4MCIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyMzE2NzkwfQ.nARQqw64IssSEFgatl87lqXP51QFlVI0bZxIKP8VtSE' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/crm/accounts?page=1' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw '{\"opportunityStageId\":\"64e47ecbfb4d070f4440a36c\",\"insuranceTypeId\":\"Thaleth\",\"orderType\":\"New\",\"expirationDate\":\"2025-07-11T12:17:19.378Z\",\"accountId\":\"6871009f701286c36c19edda\"}'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "invoice",
+			"item": [
+				{
+					"name": "invoice",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"{\r",
+									"\r",
+									"    // ساخت کد ملی \r",
+									"    function generateValidIranianNationalCode() {\r",
+									"    const randomDigits = [];\r",
+									"    for (let i = 0; i < 9; i++) {\r",
+									"        randomDigits.push(Math.floor(Math.random() * 10));\r",
+									"    }\r",
+									"\r",
+									"    let sum = 0;\r",
+									"    for (let i = 0; i < 9; i++) {\r",
+									"        sum += randomDigits[i] * (10 - i);\r",
+									"    }\r",
+									"\r",
+									"    let remainder = sum % 11;\r",
+									"    let checkDigit = (remainder < 2) ? remainder : (11 - remainder);\r",
+									"\r",
+									"    randomDigits.push(checkDigit);\r",
+									"    return randomDigits.join('');\r",
+									"}\r",
+									"\r",
+									"let nationalCode = generateValidIranianNationalCode();\r",
+									"pm.variables.set(\"nationalCode\", nationalCode);  // 👈 متغیر موقت، نه محیطی\r",
+									"console.log(\"✅ Temporary National Code:\", nationalCode);\r",
+									"\r",
+									"\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let invoiceIds = response.invoiceIds;\r",
+									"pm.environment.set(\"invoiceIds\",invoiceIds);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "https://stage.azki.dev"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/crm/pricing/car-thirdParty"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.550887413.1749450481; _clck=wxyymn%7C2%7Cfxj%7C0%7C2019; _clsk=1gzxgss%7C1752295333967%7C1%7C1%7Ck.clarity.ms%2Fcollect; _ga_02T0HTSFX4=GS2.1.s1752295332$o12$g0$t1752296573$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxMjQ0MDQwOTUiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY0ZTU5OWYzZmI0ZDA3MGY0NDQxY2I4ZSIsImp0aSI6IjM5M2NhNjYyLWU3MDgtNDliYS1iZGEyLWZhMzBiNzJkZmI0MiIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLYudmE24zYsdi22KcgINmF2LTZh9iv24wgKiIsImV4cCI6MTc1MjM4Mjk3NX0.ZzMGQXk0XE1nzJD7Ka66Jz6G6Zuj_sqyGmnA-FpdA6M"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"thirdPartyInvoices\": [\r\n        {\r\n            \"addPolicyholderDTO\": {\r\n                \"type\": \"Natural\",\r\n                \"firstName\": \"{{FirstName}}\",\r\n                \"lastName\": \"{{lastName}}\",\r\n                \"birthDate\": \"2025-07-09T08:59:14.473851Z\",\r\n                \"nationalCode\": \"{{nationalCode}}\",\r\n                \"phoneNumber\": \"{{phoneNumber}}\",\r\n                \"gender\": \"Male\",\r\n                \"provinceId\": \"64e47ec9fb4d070f44409ea0\",\r\n                \"cityId\": \"64e47ec9fb4d070f44409ea1\",\r\n                \"postalCode\": \"1111111111\",\r\n                \"address\": \"خیابان پیروزی، خیابان دوم نیروهوایی، فرعی ۲/۲۲ (شهید طالبی)، پلاک ۳۳، واحد ۳\",\r\n                \"email\": \"ma5810ka5810@gmail.com\",\r\n                \"landLineNumber\": \"02177327918\"\r\n            },\r\n            \"addVehicleDTO\": {\r\n                \"ownerPhoneNumber\": \"{{Mobile}}\",\r\n                \"ownerFirstName\": \"{{FirstName}}\",\r\n                \"ownerLastName\": \"{{lastName}}\",\r\n                \"ownerNationalId\": \"{{nationalCode}}\",\r\n                \"ownerBirthDate\": \"2025-07-09\",\r\n                \"vehicleOwnerGender\": \"Male\",\r\n                \"brandId\": \"64e47f0afb4d070f4440baf3\",\r\n                \"vehicleColorId\": \"64e47f37fb4d070f4440cc76\",\r\n                \"modelId\": \"64e47f0afb4d070f4440bafa\",\r\n                \"vehicleTypeId\": \"64e47ef7fb4d070f4440abf7\",\r\n                \"vehicleFuelTypeId\": \"64e47f3efb4d070f4440cca6\",\r\n                \"usageId\": \"64e47ed1fb4d070f4440a432\",\r\n                \"year\": \"1404\",\r\n                \"cylinder\": null,\r\n                \"passengerCapacity\": null\r\n            },\r\n            \"addLicencePlateDTO\": {\r\n                \"firstNumber\": \"22\",\r\n                \"region\": \"22\",\r\n                \"secondNumber\": \"252\",\r\n                \"type\": \"الف\",\r\n                \"ownerNationalId\": \"{{nationalCode}}\",\r\n                \"ownerFirstName\": \"\",\r\n                \"ownerLastName\": \"\",\r\n                \"licencePlateType\": \"Car\"\r\n            },\r\n            \"coverAmount\": 533000000,\r\n            \"penaltyDays\": 0,\r\n            \"totalPenalty\": 0,\r\n            \"coverId\": \"64e47ed8ffb4d070f4440a51a\",\r\n            \"netPrice\": 91349280,\r\n            \"prepayment\": 19469856,\r\n            \"insuranceId\": \"64e47ee8fb4d070f4440aaac\",\r\n            \"insuranceCompanyId\": \"Dey\",\r\n            \"companyDiscountAmount\": 11418660,\r\n            \"durationInMonth\": 12,\r\n            \"discountAmount\": 11418660,\r\n            \"priorInsuranceId\": \"Asia\",\r\n            \"expirationDateTime\": \"2025-07-12\",\r\n            \"driverDiscountId\": \"64e47ed2fb4d070f4440a450\",\r\n            \"discountId\": \"64e47ed4fb4d070f4440a489\",\r\n            \"oldInsuranceStartDate\": \"2024-07-12\",\r\n            \"oldInsuranceExpireDate\": \"2025-07-12\",\r\n            \"oldInsuranceCompanyId\": \"Asia\",\r\n            \"lifeDamageId\": \"64e47edcfb4d070f4440a5b7\",\r\n            \"driverLifeDamageId\": \"64e47ed4fb4d070f4440a47d\",\r\n            \"financialDamageId\": \"64e47edbfb4d070f4440a5ab\",\r\n            \"isSanhabResultComplete\": null,\r\n            \"isOwnerChanged\": false,\r\n            \"sanhabInquiryId\": null,\r\n            \"accountId\": \"{{accountId}}\",\r\n            \"policyholderType\": \"Himself\",\r\n            \"updateAccountFrom\": \"PolicyHolder\",\r\n            \"payInInstallments\": false,\r\n            \"oldInsuranceUsed\": false,\r\n            \"agentDiscountAmount\": 0,\r\n            \"giftAmount\": 0,\r\n            \"opportunityId\": \"{{opportunityId}}\",\r\n            \"zeroKilometer\": false,\r\n            \"withoutInsurance\": false,\r\n            \"paymentTypeId\": 0,\r\n            \"orderType\": \"New\",\r\n            \"payerType\": \"Seller\",\r\n            \"hasSheller\": false\r\n        }\r\n    ],\r\n    \"phoneNumber\": \"{{phoneNumber}}\",\r\n    \"isPayInInstallment\": false,\r\n    \"paymentTypeId\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stage.azki.dev/api/Invoice/thirdparty/bulk",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"Invoice",
+								"thirdparty",
+								"bulk"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/Invoice/thirdparty/bulk' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxMjQ0MDQwOTUiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY0ZTU5OWYzZmI0ZDA3MGY0NDQxY2I4ZSIsImp0aSI6IjM5M2NhNjYyLWU3MDgtNDliYS1iZGEyLWZhMzBiNzJkZmI0MiIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLYudmE24zYsdi22KcgINmF2LTZh9iv24wgKiIsImV4cCI6MTc1MjM4Mjk3NX0.ZzMGQXk0XE1nzJD7Ka66Jz6G6Zuj_sqyGmnA-FpdA6M' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -b '_ga=GA1.1.550887413.1749450481; _clck=wxyymn%7C2%7Cfxj%7C0%7C2019; _clsk=1gzxgss%7C1752295333967%7C1%7C1%7Ck.clarity.ms%2Fcollect; _ga_02T0HTSFX4=GS2.1.s1752295332$o12$g0$t1752296573$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxMjQ0MDQwOTUiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY0ZTU5OWYzZmI0ZDA3MGY0NDQxY2I4ZSIsImp0aSI6IjM5M2NhNjYyLWU3MDgtNDliYS1iZGEyLWZhMzBiNzJkZmI0MiIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLYudmE24zYsdi22KcgINmF2LTZh9iv24wgKiIsImV4cCI6MTc1MjM4Mjk3NX0.ZzMGQXk0XE1nzJD7Ka66Jz6G6Zuj_sqyGmnA-FpdA6M' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/crm/pricing/car-thirdParty' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw '{\"thirdPartyInvoices\":[{\"addPolicyholderDTO\":{\"type\":\"Natural\",\"firstName\":\"شارون\",\"lastName\":\"عدمی\",\"birthDate\":\"2025-07-09T08:59:14.473851Z\",\"nationalCode\":\"1211155476\",\"phoneNumber\":\"09365959280\",\"gender\":\"Male\",\"provinceId\":\"64e47ec9fb4d070f44409ea0\",\"cityId\":\"64e47ec9fb4d070f44409ea1\",\"postalCode\":\"1111111111\",\"address\":\"خیابان پیروزی، خیابان دوم نیروهوایی، فرعی ۲/۲۲ (شهید طالبی)، پلاک ۳۳، واحد ۳\",\"email\":\"ma5810ka5810@gmail.com\",\"landLineNumber\":\"02177327918\"},\"addVehicleDTO\":{\"ownerPhoneNumber\":\"09365959280\",\"ownerFirstName\":\"شارون\",\"ownerLastName\":\"عدمی\",\"ownerNationalId\":\"1211155476\",\"ownerBirthDate\":\"2025-07-09\",\"vehicleOwnerGender\":\"Male\",\"brandId\":\"64e47f0afb4d070f4440baf3\",\"vehicleColorId\":\"64e47f37fb4d070f4440cc76\",\"modelId\":\"64e47f0afb4d070f4440bafa\",\"vehicleTypeId\":\"64e47ef7fb4d070f4440abf7\",\"vehicleFuelTypeId\":\"64e47f3efb4d070f4440cca6\",\"usageId\":\"64e47ed1fb4d070f4440a432\",\"year\":\"1404\",\"cylinder\":null,\"passengerCapacity\":null},\"addLicencePlateDTO\":{\"firstNumber\":\"22\",\"region\":\"22\",\"secondNumber\":\"252\",\"type\":\"الف\",\"ownerNationalId\":\"0081952623\",\"ownerFirstName\":\"شارون\",\"ownerLastName\":\"عدمی\",\"licencePlateType\":\"Car\"},\"coverAmount\":533000000,\"penaltyDays\":0,\"totalPenalty\":0,\"coverId\":\"64e47ed8ffb4d070f4440a51a\",\"netPrice\":91349280,\"prepayment\":19469856,\"insuranceId\":\"64e47ee8fb4d070f4440aaac\",\"insuranceCompanyId\":\"Dey\",\"companyDiscountAmount\":11418660,\"durationInMonth\":12,\"discountAmount\":11418660,\"priorInsuranceId\":\"Asia\",\"expirationDateTime\":\"2025-07-12\",\"driverDiscountId\":\"64e47ed2fb4d070f4440a450\",\"discountId\":\"64e47ed4fb4d070f4440a489\",\"oldInsuranceStartDate\":\"2024-07-12\",\"oldInsuranceExpireDate\":\"2025-07-12\",\"oldInsuranceCompanyId\":\"Asia\",\"lifeDamageId\":\"64e47edcfb4d070f4440a5b7\",\"driverLifeDamageId\":\"64e47ed4fb4d070f4440a47d\",\"financialDamageId\":\"64e47edbfb4d070f4440a5ab\",\"isSanhabResultComplete\":null,\"isOwnerChanged\":false,\"sanhabInquiryId\":null,\"accountId\":\"686e2f62f863bee6ef93a683\",\"policyholderType\":\"Himself\",\"updateAccountFrom\":\"PolicyHolder\",\"payInInstallments\":false,\"oldInsuranceUsed\":false,\"agentDiscountAmount\":0,\"giftAmount\":0,\"opportunityId\":\"686e7359f863bee6ef9a189c\",\"zeroKilometer\":false,\"withoutInsurance\":false,\"paymentTypeId\":0,\"orderType\":\"New\",\"payerType\":\"Seller\",\"hasSheller\":false}],\"phoneNumber\":\"09365959280\",\"isPayInInstallment\":false,\"paymentTypeId\":0}'"
+					},
+					"response": []
+				},
+				{
+					"name": "invoice-preview",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let paymentId = response.paymentId;\r",
+									"\r",
+									"pm.environment.set(\"paymentId\",paymentId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/Invoice/preview/{{invoiceIds}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"Invoice",
+								"preview",
+								"{{invoiceIds}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "pay_with_wallet",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/api/finance/Payment/pay_with_wallet/{{paymentId}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"finance",
+								"Payment",
+								"pay_with_wallet",
+								"{{paymentId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'http://172.31.30.55:5002/api/finance/Payment/pay_with_wallet/687487f7a845c7ee34874475' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6ImI3NjA0MjVmLTFlMzMtNGUxYS1iYTdhLWViZDVkZWJjNWE5NyIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyNTUxMzU5fQ.A40MGVOxmOYEmk-XLlArklKXRmnPbT7rOf1vrHtBCsU'"
+					},
+					"response": []
+				},
+				{
+					"name": "finance/payment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let orderId = response.orderId;\r",
+									"let totalPenalty = response.order.totalPenalty;\r",
+									"\r",
+									"\r",
+									"let price = response.order?.price; // دسترسی به price داخل order\r",
+									"// let priceToman = null;\r",
+									"\r",
+									"// if (typeof price === \"number\" && !isNaN(price)) {\r",
+									"//     priceToman = Math.floor(price / 10);\r",
+									"//     pm.environment.set(\"priceToman\", priceToman);\r",
+									"//     console.log(\"✅ priceToman:\", priceToman);\r",
+									"// } else {\r",
+									"//     console.error(\"❌ price موجود نیست یا عددی نیست\", price);\r",
+									"// }\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"orderId\",orderId);\r",
+									"pm.environment.set(\"totalPenalty\",totalPenalty);\r",
+									"pm.environment.set(\"price\",price);\r",
+									"console.log(\"orderId\",orderId);\r",
+									"console.log(\"price\",price)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6ImI3NjA0MjVmLTFlMzMtNGUxYS1iYTdhLWViZDVkZWJjNWE5NyIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyNTUxMzU5fQ.A40MGVOxmOYEmk-XLlArklKXRmnPbT7rOf1vrHtBCsU"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/api/finance/Payment/{{paymentId}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"finance",
+								"Payment",
+								"{{paymentId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'http://172.31.30.55:5002/api/finance/Payment/pay_with_wallet/687487f7a845c7ee34874475' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6ImI3NjA0MjVmLTFlMzMtNGUxYS1iYTdhLWViZDVkZWJjNWE5NyIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyNTUxMzU5fQ.A40MGVOxmOYEmk-XLlArklKXRmnPbT7rOf1vrHtBCsU'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response =pm.response.json();\r",
+									"let number = response.number;\r",
+									"let price =response.price;\r",
+									"let totalPenalty = response.totalPenalty;\r",
+									"pm.environment.set(\"number\",number);\r",
+									"//pm.environment.set(\"price\",price);\r",
+									"pm.environment.set(\"totalPenalty\",totalPenalty);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/api/Order/{{orderId}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"Order",
+								"{{orderId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'http://172.31.30.55:5002/api/Order/687a2463115e773a5015eb20' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkzMzY3MDAyOTciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2Nzk2NWRhODgzZTg5NDY4Njg1NzlmMSIsImp0aSI6IjI4MjQ1ZDdjLTNhYjYtNGZlYy05ZjQ1LTA4NjViOWIwYjVkMiIsItmLUm9sZSI6IlNlbGxlciIsIlN1cm5hbWUiOiLZhdix24zZhSDaqdin2LHar9ixIiwiZXhwIjoxNzUyOTE5NDg3fQ.bpWJDYi6mxIa-Mkre19VNBKUVfFwF2tupzv0NheaAH0'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Backoffice",
+			"item": [
+				{
+					"name": "SendPhoneNumber",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phoneNumber\": \"{{phoneNumber}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/SellerAuthenticate/check_login_method?phoneNumber=09196938323",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"SellerAuthenticate",
+								"check_login_method"
+							],
+							"query": [
+								{
+									"key": "phoneNumber",
+									"value": "09196938323"
+								}
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "check_login_method",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Length",
+								"value": "0"
+							},
+							{
+								"key": "Origin",
+								"value": "https://stage.azki.dev"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "https://stage.azki.dev/login"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImYxMDA2NzViLTNjNzgtNDNlNi1iZTRmLTA0MWEyZmVjZDhiYiIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzU2OH0.-vb6aeESgJC2G8BORLv66R_kGfh9wXNvZXQWZCkSFwk"
+							}
+						],
+						"url": {
+							"raw": "https://stage.azki.dev/api/SellerAuthenticate/check_login_method?phoneNumber=09196938323",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"SellerAuthenticate",
+								"check_login_method"
+							],
+							"query": [
+								{
+									"key": "phoneNumber",
+									"value": "09196938323"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/SellerAuthenticate/check_login_method?phoneNumber=09196938323' \\\r\n  -X 'POST' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Length: 0' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImYxMDA2NzViLTNjNzgtNDNlNi1iZTRmLTA0MWEyZmVjZDhiYiIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzU2OH0.-vb6aeESgJC2G8BORLv66R_kGfh9wXNvZXQWZCkSFwk' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/login' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "send_OTP_code_Backoffice",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Length",
+								"value": "0"
+							},
+							{
+								"key": "Origin",
+								"value": "https://stage.azki.dev"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "https://stage.azki.dev/login"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImYxMDA2NzViLTNjNzgtNDNlNi1iZTRmLTA0MWEyZmVjZDhiYiIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzU2OH0.-vb6aeESgJC2G8BORLv66R_kGfh9wXNvZXQWZCkSFwk"
+							}
+						],
+						"url": {
+							"raw": "https://stage.azki.dev/api/operator/authenticate/send_OTP_code?phoneNumber=09196938323",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"operator",
+								"authenticate",
+								"send_OTP_code"
+							],
+							"query": [
+								{
+									"key": "phoneNumber",
+									"value": "09196938323"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/operator/authenticate/send_OTP_code?phoneNumber=09196938323' \\\r\n  -X 'POST' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Length: 0' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImYxMDA2NzViLTNjNzgtNDNlNi1iZTRmLTA0MWEyZmVjZDhiYiIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzU2OH0.-vb6aeESgJC2G8BORLv66R_kGfh9wXNvZXQWZCkSFwk' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/login' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let token = \"Bearer \" + response.token;\r",
+									"pm.environment.set(\"backoffice_token\",token);\r",
+									"console.log(\"backoffice_token\",token)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "https://stage.azki.dev"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "https://stage.azki.dev/login"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImYxMDA2NzViLTNjNzgtNDNlNi1iZTRmLTA0MWEyZmVjZDhiYiIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzU2OH0.-vb6aeESgJC2G8BORLv66R_kGfh9wXNvZXQWZCkSFwk"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phoneNumber\": \"09196938323\",\r\n    \"confirmationCode\": \"86953\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stage.azki.dev/api/operator/authenticate/login",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"operator",
+								"authenticate",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/operator/authenticate/login' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImYxMDA2NzViLTNjNzgtNDNlNi1iZTRmLTA0MWEyZmVjZDhiYiIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzU2OH0.-vb6aeESgJC2G8BORLv66R_kGfh9wXNvZXQWZCkSFwk' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/login' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw '{\"phoneNumber\":\"09196938323\",\"confirmationCode\":\"86953\"}'"
+					},
+					"response": []
+				},
+				{
+					"name": "search-number",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{backoffice_token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/backoffice"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImY2NzU4NGRmLWU4OTUtNDU4NS1hMmVhLTdlNmEwODlmOTZjOCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzczMH0.Kkbvmo9106B_aecYCJi1c0KgRbRkhW8vg-dSRsTDiCE"
+							}
+						],
+						"url": {
+							"raw": "https://stage.azki.dev/api/back_office/order?PageNumber=1&Number={{number}}&refetchIntervalms=30000",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"back_office",
+								"order"
+							],
+							"query": [
+								{
+									"key": "PageNumber",
+									"value": "1"
+								},
+								{
+									"key": "Number",
+									"value": "{{number}}"
+								},
+								{
+									"key": "refetchIntervalms",
+									"value": "30000"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/back_office/order?PageNumber=1&Number=1180782&refetchIntervalms=30000' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImY2NzU4NGRmLWU4OTUtNDU4NS1hMmVhLTdlNmEwODlmOTZjOCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzczMH0.Kkbvmo9106B_aecYCJi1c0KgRbRkhW8vg-dSRsTDiCE' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImY2NzU4NGRmLWU4OTUtNDU4NS1hMmVhLTdlNmEwODlmOTZjOCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzczMH0.Kkbvmo9106B_aecYCJi1c0KgRbRkhW8vg-dSRsTDiCE' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/backoffice' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "back_office/operator/agencies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm .response.json();\r",
+									"let agencyId = response.agencies[0].agencyCommissions[0].agencyId;\r",
+									"pm.environment.set(\"agencyId\",agencyId);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{backoffice_token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/backoffice"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDk4MDAwMDAwMDIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2ZDMyNTllZGUwNTAxMzQxYjNiNmM2NyIsImp0aSI6IjhiZDZhMDk2LWVhMjYtNGIxZi1iNDAyLTkwZjExODM4ZDYwZSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6Iti62LLZhCDYr9in2YbZhtiv2YciLCJleHAiOjE3NTI5MzIwOTh9.Tf5XrAaic7Np2KQsvHwejedwOjN11Y-Pszd0zW-bqzA"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/api/back_office/operator/agencies?pageNumber=1&insuranceCompanyId=Dey&isActive=true",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"back_office",
+								"operator",
+								"agencies"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "insuranceCompanyId",
+									"value": "Dey"
+								},
+								{
+									"key": "isActive",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/back_office/operator/agencies?pageNumber=1&insuranceCompanyId=Dey&isActive=true' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDk4MDAwMDAwMDIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2ZDMyNTllZGUwNTAxMzQxYjNiNmM2NyIsImp0aSI6IjhiZDZhMDk2LWVhMjYtNGIxZi1iNDAyLTkwZjExODM4ZDYwZSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6Iti62LLZhCDYr9in2YbZhtiv2YciLCJleHAiOjE3NTI5MzIwOTh9.Tf5XrAaic7Np2KQsvHwejedwOjN11Y-Pszd0zW-bqzA' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDk4MDAwMDAwMDIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2ZDMyNTllZGUwNTAxMzQxYjNiNmM2NyIsImp0aSI6IjhiZDZhMDk2LWVhMjYtNGIxZi1iNDAyLTkwZjExODM4ZDYwZSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6Iti62LLZhCDYr9in2YbZhtiv2YciLCJleHAiOjE3NTI5MzIwOTh9.Tf5XrAaic7Np2KQsvHwejedwOjN11Y-Pszd0zW-bqzA' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/backoffice' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "/issuers_agents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"let operator = response.issuersOperators.find(item => \r",
+									"    item.issuerOperator.fullName.trim() === \"لیلا داوطلب\"\r",
+									");\r",
+									"\r",
+									"if (operator) {\r",
+									"    let operatorId = operator.issuerOperator.id;\r",
+									"    pm.environment.set(\"operatorId\", operatorId);\r",
+									"    console.log(\"✅ operatorId (لیلا داوطلب):\", operatorId);\r",
+									"} else {\r",
+									"    console.warn(\"❌ اپراتور با نام 'لیلا داوطلب' پیدا نشد.\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{backoffice_token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/backoffice"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDk4MDAwMDAwMDIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2ZDMyNTllZGUwNTAxMzQxYjNiNmM2NyIsImp0aSI6IjhiZDZhMDk2LWVhMjYtNGIxZi1iNDAyLTkwZjExODM4ZDYwZSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6Iti62LLZhCDYr9in2YbZhtiv2YciLCJleHAiOjE3NTI5MzIwOTh9.Tf5XrAaic7Np2KQsvHwejedwOjN11Y-Pszd0zW-bqzA"
+							}
+						],
+						"url": {
+							"raw": "https://stage.azki.dev/api/back_office/Operator/issuers_agents?agencyId={{agencyId}}&pageNumber=1&search=",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"back_office",
+								"Operator",
+								"issuers_agents"
+							],
+							"query": [
+								{
+									"key": "agencyId",
+									"value": "{{agencyId}}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "search",
+									"value": ""
+								}
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/back_office/Operator/issuers_agents?agencyId=68762bcbaa1643017bf692c1&pageNumber=1&search=' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDk4MDAwMDAwMDIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2ZDMyNTllZGUwNTAxMzQxYjNiNmM2NyIsImp0aSI6IjhiZDZhMDk2LWVhMjYtNGIxZi1iNDAyLTkwZjExODM4ZDYwZSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6Iti62LLZhCDYr9in2YbZhtiv2YciLCJleHAiOjE3NTI5MzIwOTh9.Tf5XrAaic7Np2KQsvHwejedwOjN11Y-Pszd0zW-bqzA' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDk4MDAwMDAwMDIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2ZDMyNTllZGUwNTAxMzQxYjNiNmM2NyIsImp0aSI6IjhiZDZhMDk2LWVhMjYtNGIxZi1iNDAyLTkwZjExODM4ZDYwZSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6Iti62LLZhCDYr9in2YbZhtiv2YciLCJleHAiOjE3NTI5MzIwOTh9.Tf5XrAaic7Np2KQsvHwejedwOjN11Y-Pszd0zW-bqzA' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/backoffice' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "ajjencyId",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{backoffice_token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "{{baseurl}}"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/backoffice"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImY2NzU4NGRmLWU4OTUtNDU4NS1hMmVhLTdlNmEwODlmOTZjOCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzczMH0.Kkbvmo9106B_aecYCJi1c0KgRbRkhW8vg-dSRsTDiCE"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"issuerOperatorId\": \"{{operatorId}}\",\r\n    \"agencyId\": \"{{agencyId}}\"\r\n    \r\n\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/back_office/Order/assign_order_to_issuer/{{orderId}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"back_office",
+								"Order",
+								"assign_order_to_issuer",
+								"{{orderId}}"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/back_office/Order/assign_order_to_issuer/687a2463115e773a5015eb20' \\\r\n  -X 'PUT' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImY2NzU4NGRmLWU4OTUtNDU4NS1hMmVhLTdlNmEwODlmOTZjOCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzczMH0.Kkbvmo9106B_aecYCJi1c0KgRbRkhW8vg-dSRsTDiCE' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkxOTY5MzgzMjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3MDhmMjEwMmQyY2QyOThmOTJiYzMyNiIsImp0aSI6ImY2NzU4NGRmLWU4OTUtNDU4NS1hMmVhLTdlNmEwODlmOTZjOCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmG2LPYqtix2YYg2LTYsdin2YfbjCIsImV4cCI6MTc1MjkyMzczMH0.Kkbvmo9106B_aecYCJi1c0KgRbRkhW8vg-dSRsTDiCE' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/backoffice' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw '{\"issuerOperatorId\":\"66461568a241f9aea54222c9\",\"agencyId\":\"68762bcbaa1643017bf692c1\"}'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Issuer",
+			"item": [
+				{
+					"name": "route_to_login",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "https://stage.azki.dev/login"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjM3ZGU3Mjg3LTA4NmYtNDA5Yy05ZmZmLWU1ZmM0NDEzYWNiMSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODY5NH0.UgifCmtiDoKDs3UuNpHgqE0rex7F8eGNawO4TlrURUk"
+							}
+						],
+						"url": {
+							"raw": "https://stage.azki.dev/api/common/route_to_login?phoneNumber=09016449909",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"common",
+								"route_to_login"
+							],
+							"query": [
+								{
+									"key": "phoneNumber",
+									"value": "09016449909"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/common/route_to_login?phoneNumber=09016449909' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjM3ZGU3Mjg3LTA4NmYtNDA5Yy05ZmZmLWU1ZmM0NDEzYWNiMSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODY5NH0.UgifCmtiDoKDs3UuNpHgqE0rex7F8eGNawO4TlrURUk' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/login' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "check_login_method",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Length",
+								"value": "0"
+							},
+							{
+								"key": "Origin",
+								"value": "https://stage.azki.dev"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "https://stage.azki.dev/login"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjM3ZGU3Mjg3LTA4NmYtNDA5Yy05ZmZmLWU1ZmM0NDEzYWNiMSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODY5NH0.UgifCmtiDoKDs3UuNpHgqE0rex7F8eGNawO4TlrURUk"
+							}
+						],
+						"url": {
+							"raw": "https://stage.azki.dev/api/SellerAuthenticate/check_login_method?phoneNumber=09016449909",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"SellerAuthenticate",
+								"check_login_method"
+							],
+							"query": [
+								{
+									"key": "phoneNumber",
+									"value": "09016449909"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/SellerAuthenticate/check_login_method?phoneNumber=09016449909' \\\r\n  -X 'POST' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Length: 0' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjM3ZGU3Mjg3LTA4NmYtNDA5Yy05ZmZmLWU1ZmM0NDEzYWNiMSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODY5NH0.UgifCmtiDoKDs3UuNpHgqE0rex7F8eGNawO4TlrURUk' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/login' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "send_OTP_code",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Length",
+								"value": "0"
+							},
+							{
+								"key": "Origin",
+								"value": "https://stage.azki.dev"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "https://stage.azki.dev/login"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjM3ZGU3Mjg3LTA4NmYtNDA5Yy05ZmZmLWU1ZmM0NDEzYWNiMSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODY5NH0.UgifCmtiDoKDs3UuNpHgqE0rex7F8eGNawO4TlrURUk"
+							}
+						],
+						"url": {
+							"raw": "https://stage.azki.dev/api/operator/authenticate/send_OTP_code?phoneNumber=09016449909",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"operator",
+								"authenticate",
+								"send_OTP_code"
+							],
+							"query": [
+								{
+									"key": "phoneNumber",
+									"value": "09016449909"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/operator/authenticate/send_OTP_code?phoneNumber=09016449909' \\\r\n  -X 'POST' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Length: 0' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjM3ZGU3Mjg3LTA4NmYtNDA5Yy05ZmZmLWU1ZmM0NDEzYWNiMSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODY5NH0.UgifCmtiDoKDs3UuNpHgqE0rex7F8eGNawO4TlrURUk' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/login' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let token = \"Bearer \" + response.token;\r",
+									"pm.environment.set(\"issuer_token\",token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "https://stage.azki.dev"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "https://stage.azki.dev/login"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjM3ZGU3Mjg3LTA4NmYtNDA5Yy05ZmZmLWU1ZmM0NDEzYWNiMSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODY5NH0.UgifCmtiDoKDs3UuNpHgqE0rex7F8eGNawO4TlrURUk"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phoneNumber\": \"09016449909\",\r\n    \"confirmationCode\": \"85009\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/operator/authenticate/login",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"operator",
+								"authenticate",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/operator/authenticate/login' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjM3ZGU3Mjg3LTA4NmYtNDA5Yy05ZmZmLWU1ZmM0NDEzYWNiMSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODY5NH0.UgifCmtiDoKDs3UuNpHgqE0rex7F8eGNawO4TlrURUk' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/login' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw '{\"phoneNumber\":\"09016449909\",\"confirmationCode\":\"85009\"}'"
+					},
+					"response": []
+				},
+				{
+					"name": "/back_office/order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let insuranceId = response.insuranceId;\r",
+									"pm.environment.set('insuranceId',insuranceId);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{issuer_token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/issuing/order-detail/687a2463115e773a5015eb20"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6ImZmMWY2MmU0LTkzOTAtNGQ0YS04YmNkLWU0MzZhODc4MGY3OCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODc4MX0.k2MIwxIowgy8Lx5zYMi5WdU6kL_O87hh2yW-M_vBy0s"
+							}
+						],
+						"url": {
+							"raw": "https://stage.azki.dev/api/back_office/order/{{orderId}}",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"back_office",
+								"order",
+								"{{orderId}}"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/back_office/order/687a2463115e773a5015eb20' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6ImZmMWY2MmU0LTkzOTAtNGQ0YS04YmNkLWU0MzZhODc4MGY3OCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODc4MX0.k2MIwxIowgy8Lx5zYMi5WdU6kL_O87hh2yW-M_vBy0s' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6ImZmMWY2MmU0LTkzOTAtNGQ0YS04YmNkLWU0MzZhODc4MGY3OCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODc4MX0.k2MIwxIowgy8Lx5zYMi5WdU6kL_O87hh2yW-M_vBy0s' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/issuing/order-detail/687a2463115e773a5015eb20' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "back_office/Order/premium",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{issuer_token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "{{baseurl}}"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/issuing/order-detail/687a2463115e773a5015eb20/cost-registration"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6ImZmMWY2MmU0LTkzOTAtNGQ0YS04YmNkLWU0MzZhODc4MGY3OCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODc4MX0.k2MIwxIowgy8Lx5zYMi5WdU6kL_O87hh2yW-M_vBy0s"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"premium\": {{price}},\r\n    \"finalTotalPenalty\": {{totalPenalty}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stage.azki.dev/api/back_office/Order/premium/{{orderId}}",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"back_office",
+								"Order",
+								"premium",
+								"{{orderId}}"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/back_office/Order/premium/687a2463115e773a5015eb20' \\\r\n  -X 'PUT' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6ImZmMWY2MmU0LTkzOTAtNGQ0YS04YmNkLWU0MzZhODc4MGY3OCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODc4MX0.k2MIwxIowgy8Lx5zYMi5WdU6kL_O87hh2yW-M_vBy0s' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6ImZmMWY2MmU0LTkzOTAtNGQ0YS04YmNkLWU0MzZhODc4MGY3OCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODc4MX0.k2MIwxIowgy8Lx5zYMi5WdU6kL_O87hh2yW-M_vBy0s' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/issuing/order-detail/687a2463115e773a5015eb20/cost-registration' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw '{\"premium\":913492800,\"finalTotalPenalty\":0}'"
+					},
+					"response": []
+				},
+				{
+					"name": "/back_office/order",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "AlterAuthorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjBkNDZiOTJhLTI2ZWMtNDBkOC04MWI4LTQ4MzA1ZWUzOGZjMyIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1Mjk4NjQxN30.vaZnZPEhN71Cq6L3no5fdyKnffW6CuLHHx-XzieoAZE"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{issuer_token}}"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/issuing/order-detail/687a5f68115e773a50172b69"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Microsoft Edge\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjBkNDZiOTJhLTI2ZWMtNDBkOC04MWI4LTQ4MzA1ZWUzOGZjMyIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1Mjk4NjQxN30.vaZnZPEhN71Cq6L3no5fdyKnffW6CuLHHx-XzieoAZE"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/api/back_office/order/{{orderId}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"back_office",
+								"order",
+								"{{orderId}}"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/back_office/order/687a5f68115e773a50172b69' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'AlterAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjBkNDZiOTJhLTI2ZWMtNDBkOC04MWI4LTQ4MzA1ZWUzOGZjMyIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1Mjk4NjQxN30.vaZnZPEhN71Cq6L3no5fdyKnffW6CuLHHx-XzieoAZE' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMzIxMjE5ODAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY0ZTQ3ZjRmZmI0ZDA3MGY0NDQwY2Q1MSIsImp0aSI6IjJhMDViMDRmLWVjMzQtNGU4OC05Y2I4LWUzMGI1NjQ0NDcwNSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmF2LHbjNmFINiv2YTYtNin2K8iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc1Mjk4NjM5N30.VrJVWzYuyhln6MOHESB0XRokf0mdifO8jpr_AdXhPjk' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -b 'securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjBkNDZiOTJhLTI2ZWMtNDBkOC04MWI4LTQ4MzA1ZWUzOGZjMyIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1Mjk4NjQxN30.vaZnZPEhN71Cq6L3no5fdyKnffW6CuLHHx-XzieoAZE' \\\r\n  -H 'Referer: https://stage.azki.dev/issuing/order-detail/687a5f68115e773a50172b69' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Microsoft Edge\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "print-file",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{issuer_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "print",
+									"contentType": "image/jpeg",
+									"type": "file",
+									"src": [
+										"check.jpg",
+										"/C:/Azki/111.png"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/back_office/Order/{{orderId}}/print",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"back_office",
+								"Order",
+								"{{orderId}}",
+								"print"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PATCH' \\\r\n  'http://172.31.30.55:5002/api/back_office/Order/687b2520115e773a50177b3f/print' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjA4ZDM5NDQ1LWVmMTctNDE1Yy1iMmY0LWZhOGJiOTc0YTg5NiIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1Mjk4NjM0MH0.CZz4T6ycQZqL_JjESrLCqurlqZntw9r9x25YFI-U2OA' \\\r\n  -H 'Content-Type: multipart/form-data' \\\r\n  -F 'print=@check.jpg;type=image/jpeg'"
+					},
+					"response": []
+				},
+				{
+					"name": "/back_office/IDf/print",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{issuer_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://172.31.30.55:5002/api/back_office/Order/{{orderId}}/print",
+							"protocol": "http",
+							"host": [
+								"172",
+								"31",
+								"30",
+								"55"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"back_office",
+								"Order",
+								"{{orderId}}",
+								"print"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'http://172.31.30.55:5002/api/back_office/Order/687b2520115e773a50177b3f/print' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjA4ZDM5NDQ1LWVmMTctNDE1Yy1iMmY0LWZhOGJiOTc0YTg5NiIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1Mjk4NjM0MH0.CZz4T6ycQZqL_JjESrLCqurlqZntw9r9x25YFI-U2OA'"
+					},
+					"response": []
+				},
+				{
+					"name": "Account/document",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{issuer_token}}"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Pragma",
+								"value": "no-cache"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}issuing/order-detail/687a2463115e773a5015eb20"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6ImZmMWY2MmU0LTkzOTAtNGQ0YS04YmNkLWU0MzZhODc4MGY3OCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODc4MX0.k2MIwxIowgy8Lx5zYMi5WdU6kL_O87hh2yW-M_vBy0s"
+							}
+						],
+						"url": {
+							"raw": "https://stage.azki.dev/api/Account/document?accountId={{accountId}}&orderId={{orderId}}",
+							"protocol": "https",
+							"host": [
+								"stage",
+								"azki",
+								"dev"
+							],
+							"path": [
+								"api",
+								"Account",
+								"document"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "{{accountId}}"
+								},
+								{
+									"key": "orderId",
+									"value": "{{orderId}}"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/Account/document?accountId=687a1c4c115e773a5015dace&orderId=687a2463115e773a5015eb20' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6ImZmMWY2MmU0LTkzOTAtNGQ0YS04YmNkLWU0MzZhODc4MGY3OCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODc4MX0.k2MIwxIowgy8Lx5zYMi5WdU6kL_O87hh2yW-M_vBy0s' \\\r\n  -H 'Cache-Control: no-cache' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -b '_ga=GA1.1.1789852677.1749378918; _clck=co6vsw%7C2%7Cfxg%7C0%7C2016; _ga_02T0HTSFX4=GS2.1.s1752230345$o29$g0$t1752230345$j60$l0$h0; securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6ImZmMWY2MmU0LTkzOTAtNGQ0YS04YmNkLWU0MzZhODc4MGY3OCIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1MjkyODc4MX0.k2MIwxIowgy8Lx5zYMi5WdU6kL_O87hh2yW-M_vBy0s' \\\r\n  -H 'Pragma: no-cache' \\\r\n  -H 'Referer: https://stage.azki.dev/issuing/order-detail/687a2463115e773a5015eb20' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+					},
+					"response": []
+				},
+				{
+					"name": "/issue_thirdparty_policy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let today = new Date();\r",
+									"let formattedDate = today.toISOString().split(\"T\")[0]; // مثل: 2025-07-18\r",
+									"pm.variables.set(\"todayDate\", formattedDate);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "AlterAuthorization",
+								"value": "{{issuer_token}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{issuer_token}}"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "https://stage.azki.dev"
+							},
+							{
+								"key": "Referer",
+								"value": "{{baseurl}}/issuing/order-detail/687a5f68115e773a50172b69/final-issuance"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Microsoft Edge\";v=\"138\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjBkNDZiOTJhLTI2ZWMtNDBkOC04MWI4LTQ4MzA1ZWUzOGZjMyIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1Mjk4NjQxN30.vaZnZPEhN71Cq6L3no5fdyKnffW6CuLHHx-XzieoAZE"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"expireDate\": \"2026/07/19\",\r\n    \"thirdPartyOrderId\": \"{{orderId}}\",\r\n    \"durationInMonth\": 12,\r\n    \"payInInstallments\": false,\r\n    \"operatorUserId\": \"{{operatorId}}\",\r\n    \"insuranceCompanyId\": \"Dey\",\r\n    \"insuranceId\": \"{{insuranceId}}\",\r\n    \"accountId\": \"{{accountId}}\",\r\n    \"coverAmount\": 53300000,\r\n    \"penaltyDays\": 0,\r\n    \"totalPenalty\": 0,\r\n    \"zeroKilometer\": false,\r\n    \"driverLicenceNumber\": null,\r\n    \"withoutInsurance\": false,\r\n    \"coverId\": \"64e47ed8ffb4d070f4440a51a\",\r\n    \"lifeDamageId\": \"64e47edcfb4d070f4440a5b7\",\r\n    \"driverLifeDamageId\": \"64e47ed4fb4d070f4440a47d\",\r\n    \"financialDamageId\": \"64e47edbfb4d070f4440a5ab\",\r\n    \"discountId\": \"64e47ed4fb4d070f4440a489\",\r\n    \"driverDiscountId\": \"64e47ed2fb4d070f4440a450\",\r\n    \"vehicleId\": \"687a5f2b115e773a50172aee\",\r\n    \"licencePlateId\": \"687a5f2b115e773a50172aed\",\r\n    \"vehiclePropertyId\": null,\r\n    \"updateVehicleInfo\": {\r\n        \"vehicleId\": \"687a5f2b115e773a50172aee\",\r\n        \"ownerBirthDate\": \"2025-07-09T00:00:00Z\",\r\n        \"year\": \"1404\",\r\n        \"modelId\": \"64e47f0afb4d070f4440bafa\",\r\n        \"brandId\": \"64e47f0afb4d070f4440baf3\",\r\n        \"usageId\": \"64e47ed1fb4d070f4440a432\",\r\n        \"vehicleTypeId\": \"64e47ef7fb4d070f4440abf7\",\r\n        \"vehicleColorId\": \"64e47f37fb4d070f4440cc76\",\r\n        \"ownerNationalId\": \"1485477387\",\r\n        \"ownerFirstName\": \"{{FirstName}}\",\r\n        \"ownerLastName\": \"{{lastName}}\",\r\n        \"color\": \"مشکی\",\r\n        \"cylinder\": null,\r\n        \"vehicleFuelTypeId\": \"64e47f3efb4d070f4440cca6\",\r\n        \"vehicleOwnerGender\": \"Male\",\r\n        \"ownerPhoneNumber\": \"09974467913\",\r\n        \"vin\": \"IR42500000112523023\",\r\n        \"chassisNumber\": \"MSDN005\",\r\n        \"engineNumber\": \"MJK0212320222\",\r\n        \"passengerCapacity\": null\r\n    },\r\n    \"discountAmount\": 0,\r\n    \"driverDiscountAmount\": 0,\r\n    \"driverLicenceIssueDate\": \"2025/07/19\",\r\n    \"status\": \"Issued\",\r\n    \"issueDate\": \"2025/07/18\",\r\n    \"sanhabInquiryId\": null,\r\n    \"priorInsuranceCompanyId\": \"Asia\",\r\n    \"uniqueCode\": \"{{number}}\",\r\n    \"policyNumber\": \"{{number}}\",\r\n    \"startDate\": \"{{todayDate}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/back_office/Policy/issue_thirdparty_policy",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"back_office",
+								"Policy",
+								"issue_thirdparty_policy"
+							]
+						},
+						"description": "Generated from cURL: curl 'https://stage.azki.dev/api/back_office/Policy/issue_thirdparty_policy' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9' \\\r\n  -H 'AlterAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjBkNDZiOTJhLTI2ZWMtNDBkOC04MWI4LTQ4MzA1ZWUzOGZjMyIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1Mjk4NjQxN30.vaZnZPEhN71Cq6L3no5fdyKnffW6CuLHHx-XzieoAZE' \\\r\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMzIxMjE5ODAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY0ZTQ3ZjRmZmI0ZDA3MGY0NDQwY2Q1MSIsImp0aSI6IjJhMDViMDRmLWVjMzQtNGU4OC05Y2I4LWUzMGI1NjQ0NDcwNSIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmF2LHbjNmFINiv2YTYtNin2K8iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc1Mjk4NjM5N30.VrJVWzYuyhln6MOHESB0XRokf0mdifO8jpr_AdXhPjk' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -b 'securityToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkwMTY0NDk5MDkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY2NDYxNTY4YTI0MWY5YWVhNTQyMjJjOSIsImp0aSI6IjBkNDZiOTJhLTI2ZWMtNDBkOC04MWI4LTQ4MzA1ZWUzOGZjMyIsItmLUm9sZSI6Ik9wZXJhdG9yIiwiU3VybmFtZSI6ItmE24zZhNinINiv2KfZiNi32YTYqCIsImV4cCI6MTc1Mjk4NjQxN30.vaZnZPEhN71Cq6L3no5fdyKnffW6CuLHHx-XzieoAZE' \\\r\n  -H 'Origin: https://stage.azki.dev' \\\r\n  -H 'Referer: https://stage.azki.dev/issuing/order-detail/687a5f68115e773a50172b69/final-issuance' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0' \\\r\n  -H 'sec-ch-ua: \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Microsoft Edge\";v=\"138\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw '{\"expireDate\":\"2026/07/19\",\"thirdPartyOrderId\":\"687a5f68115e773a50172b69\",\"durationInMonth\":12,\"payInInstallments\":false,\"operatorUserId\":\"66461568a241f9aea54222c9\",\"insuranceCompanyId\":\"Dey\",\"insuranceId\":\"64e47ee8fb4d070f4440aaac\",\"accountId\":\"687a4c86115e773a5016a97d\",\"coverAmount\":53300000,\"penaltyDays\":0,\"totalPenalty\":0,\"zeroKilometer\":false,\"driverLicenceNumber\":null,\"withoutInsurance\":false,\"coverId\":\"64e47ed8ffb4d070f4440a51a\",\"lifeDamageId\":\"64e47edcfb4d070f4440a5b7\",\"driverLifeDamageId\":\"64e47ed4fb4d070f4440a47d\",\"financialDamageId\":\"64e47edbfb4d070f4440a5ab\",\"discountId\":\"64e47ed4fb4d070f4440a489\",\"driverDiscountId\":\"64e47ed2fb4d070f4440a450\",\"vehicleId\":\"687a5f2b115e773a50172aee\",\"licencePlateId\":\"687a5f2b115e773a50172aed\",\"vehiclePropertyId\":null,\"updateVehicleInfo\":{\"vehicleId\":\"687a5f2b115e773a50172aee\",\"ownerBirthDate\":\"2025-07-09T00:00:00Z\",\"year\":\"1404\",\"modelId\":\"64e47f0afb4d070f4440bafa\",\"brandId\":\"64e47f0afb4d070f4440baf3\",\"usageId\":\"64e47ed1fb4d070f4440a432\",\"vehicleTypeId\":\"64e47ef7fb4d070f4440abf7\",\"vehicleColorId\":\"64e47f37fb4d070f4440cc76\",\"ownerNationalId\":\"1485477387\",\"ownerFirstName\":\"امید\",\"ownerLastName\":\"محرم\",\"color\":\"مشکی\",\"cylinder\":null,\"vehicleFuelTypeId\":\"64e47f3efb4d070f4440cca6\",\"vehicleOwnerGender\":\"Male\",\"ownerPhoneNumber\":\"09974467913\",\"vin\":\"IR42500000112523023\",\"chassisNumber\":\"MSDN005\",\"engineNumber\":\"MJK0212320222\",\"passengerCapacity\":null},\"discountAmount\":0,\"driverDiscountAmount\":0,\"driverLicenceIssueDate\":\"2025/07/19\",\"status\":\"Issued\",\"issueDate\":\"2025/07/18\",\"sanhabInquiryId\":null,\"priorInsuranceCompanyId\":\"Asia\",\"uniqueCode\":\"112820\",\"policyNumber\":\"112820\",\"startDate\":\"2025/07/20\"}'"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "backoffice_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
